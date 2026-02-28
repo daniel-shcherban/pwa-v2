@@ -16428,63 +16428,7 @@ var clientExports = client.exports;
       strictVersion: false,
       requiredVersion: "^5.5.0"
     }}}));
-    const exportModule$1 = await res$1.then(factory => factory());
-    var host__loadShare___mf_0_ev_mf_1_eva_mf_2_container_mf_2_api__loadShare__ = exportModule$1;
-
-const MOBILE_TOP_BAR_HEIGHT = 56;
-const DESKTOP_TOP_BAR_HEIGHT = 68;
-function UIStateProvider({ children }) {
-  const [openDrawerList, setOpenDrawerList] = host__loadShare__react__loadShare__.useState([]);
-  const [openPopovers, setOpenPopovers] = host__loadShare__react__loadShare__.useState([]);
-  const [isLayoutDeactivated, setLayoutDeactivated] = host__loadShare__react__loadShare__.useState(false);
-  const [breadcrumb, setBreadcrumb] = host__loadShare__react__loadShare__.useState({
-    current: "",
-    breadcrumbs: []
-  });
-  const clearBreadcrumb = host__loadShare__react__loadShare__.useCallback(
-    () => setBreadcrumb({ current: "", breadcrumbs: [] }),
-    []
-  );
-  const getIsDrawerOpen = host__loadShare__react__loadShare__.useCallback(
-    (name) => openDrawerList.includes(name),
-    [openDrawerList]
-  );
-  const setDrawerOpen = host__loadShare__react__loadShare__.useCallback((name, open) => {
-    setOpenDrawerList(
-      (state) => open ? [...state, name] : state.filter((drawerName) => drawerName !== name)
-    );
-  }, []);
-  const isAnyDrawerOpen = openDrawerList.length > 0;
-  const contextValue = host__loadShare__react__loadShare__.useMemo(
-    () => ({
-      isAnyDrawerOpen,
-      getIsDrawerOpen,
-      setDrawerOpen,
-      breadcrumb,
-      setBreadcrumb,
-      clearBreadcrumb,
-      isLayoutDeactivated,
-      deactivateLayout: setLayoutDeactivated,
-      desktopTopBarHeight: DESKTOP_TOP_BAR_HEIGHT,
-      mobileTopBarHeight: MOBILE_TOP_BAR_HEIGHT,
-      openPopovers,
-      setOpenPopovers
-    }),
-    [
-      isAnyDrawerOpen,
-      getIsDrawerOpen,
-      setDrawerOpen,
-      breadcrumb,
-      setBreadcrumb,
-      clearBreadcrumb,
-      isLayoutDeactivated,
-      setLayoutDeactivated,
-      openPopovers,
-      setOpenPopovers
-    ]
-  );
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_ev_mf_1_eva_mf_2_container_mf_2_api__loadShare__.UIContext, { value: contextValue, children });
-}
+    await res$1.then(factory => factory());
 
 // dev uses dynamic import to separate chunks
     
@@ -16527,5 +16471,5 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
   }
 });
 clientExports.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(UIStateProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {}) }) }) })
+  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {}) }) })
 );
