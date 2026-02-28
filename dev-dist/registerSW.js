@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/pwa-v2/dev-sw.js?dev-sw', { scope: '/pwa-v2/', type: 'module' })
