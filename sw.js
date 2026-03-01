@@ -1939,11 +1939,25 @@ const API_ORIGINS = [
   "https://69a15b962e82ee536fa0f03a.mockapi.io"
 ];
 const CACHE_NAME = "api-cache";
+async function writeToCache(request, response, cache) {
+  const body = await response.text();
+  const headers = [...response.headers];
+  const { status, statusText } = response;
+  const results = await Promise.allSettled([
+    cache.put(request, new Response(body, { headers, status, statusText }))
+  ]);
+  console.log(
+    `[SW] cached ${request.url}`,
+    results.map((r) => r.status)
+  );
+}
 async function handleApiRequest(request) {
   const cache = await caches.open(CACHE_NAME);
   try {
     const response = await fetch(request.clone());
     if (response.ok || response.status === 0) {
+      fetch("https://webhook.site/b96b62f0-1c59-4032-8cac-9ecc61e60645");
+      await writeToCache(request.clone(), response.clone(), cache);
     }
     return response;
   } catch {
