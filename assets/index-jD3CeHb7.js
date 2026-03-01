@@ -16463,6 +16463,15 @@ function RemoteTodos() {
   ] });
 }
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const reg of registrations) {
+      if (!reg.scope.includes("/pwa-v2/")) {
+        reg.unregister();
+      }
+    }
+  });
+}
 const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClient({
   defaultOptions: {
     queries: {
