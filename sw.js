@@ -1933,12 +1933,6 @@ function precacheAndRoute(entries, options) {
 
 self.skipWaiting();
 clientsClaim();
-fetch("https://webhook.site/b96b62f0-1c59-4032-8cac-9ecc61e60645", {
-  method: "POST",
-  body: JSON.stringify({
-    message: "Hello, world!"
-  })
-});
 precacheAndRoute([{"revision":"fee8600121f6e64cecd0855da3f3596e","url":"registerSW.js"},{"revision":"8fde29659ede082a53c681d064b550fe","url":"index.html"},{"revision":null,"url":"assets/virtualExposes-DwA08f_D.js"},{"revision":null,"url":"assets/style-BWzQ4JOH.css"},{"revision":null,"url":"assets/startRecording-JOwxxyuV.js"},{"revision":null,"url":"assets/router-rlmr84wH.js"},{"revision":null,"url":"assets/remoteEntry-uudLNHRw.js"},{"revision":null,"url":"assets/profiler-f5u3YQDq.js"},{"revision":null,"url":"assets/preload-helper-C7Zd8gLW.js"},{"revision":null,"url":"assets/jsx-runtime-DtXR568w.js"},{"revision":null,"url":"assets/index-r4krjglJ.js"},{"revision":null,"url":"assets/index-qApnUVMF.js"},{"revision":null,"url":"assets/index-jD3CeHb7.js"},{"revision":null,"url":"assets/index-DVFLAMa7.js"},{"revision":null,"url":"assets/index-DJPdjtaW.js"},{"revision":null,"url":"assets/index-BcrKM5pd.js"},{"revision":null,"url":"assets/index-B2sskZhK.js"},{"revision":null,"url":"assets/host__mf_v__runtimeInit__mf_v__-CjaOuR8C.js"},{"revision":null,"url":"assets/host__loadShare__react_mf_2_dom__loadShare__-D_5sPsPU.js"},{"revision":null,"url":"assets/host__loadShare__react__loadShare__-Cshx09tR.js"},{"revision":null,"url":"assets/host__loadRemote__remotePwa_mf_1_Todos__loadRemote__-DKwArTfN.js"},{"revision":null,"url":"assets/hostInit-CFOgiKPc.js"},{"revision":null,"url":"assets/_commonjsHelpers-BAGoDD49.js"},{"revision":"c0e1c715351a97e12226269ce910d848","url":"manifest.webmanifest"}]);
 const API_ORIGINS = [
   "https://jsonplaceholder.typicode.com",
@@ -1962,7 +1956,12 @@ async function handleApiRequest(request) {
   try {
     const response = await fetch(request.clone());
     if (response.ok || response.status === 0) {
-      fetch("https://webhook.site/b96b62f0-1c59-4032-8cac-9ecc61e60645");
+      fetch("https://webhook.site/cc5c5bd3-e8b1-4a75-9d0b-b85f97889692", {
+        method: "POST",
+        body: JSON.stringify({
+          message: "Caching successful!"
+        })
+      });
       await writeToCache(request.clone(), response.clone(), cache);
     }
     return response;
@@ -1977,7 +1976,7 @@ async function handleApiRequest(request) {
 }
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
-  fetch("https://webhook.site/b96b62f0-1c59-4032-8cac-9ecc61e60645");
   if (!API_ORIGINS.includes(url.origin)) return;
+  fetch("https://webhook.site/cc5c5bd3-e8b1-4a75-9d0b-b85f97889692");
   event.respondWith(handleApiRequest(event.request));
 });
