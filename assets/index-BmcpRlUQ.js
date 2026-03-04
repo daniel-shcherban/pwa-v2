@@ -16661,8 +16661,7 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
   defaultOptions: {
     queries: {
       staleTime: 1e4,
-      gcTime: 1e3 * 60 * 60 * 24,
-      networkMode: "online"
+      gcTime: 1e3 * 60 * 60 * 24
     }
   }
 });
@@ -16674,6 +16673,12 @@ const persister = createAsyncStoragePersister({
   // },
   storage: window.localStorage
   // key: "rq-cache",
+});
+window.addEventListener("offline", () => {
+  queryClient.setDefaultOptions({ queries: { enabled: false } });
+});
+window.addEventListener("online", () => {
+  queryClient.setDefaultOptions({ queries: { enabled: true } });
 });
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
