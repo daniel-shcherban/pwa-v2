@@ -10,7 +10,7 @@ const importMap = {
         }
       ,
         "@tanstack/react-query": async () => {
-          let pkg = await __vitePreload(() => import('./index-BcrKM5pd.js'),true              ?[]:void 0);
+          let pkg = await __vitePreload(() => import('./index-B0GBI3lt.js'),true              ?[]:void 0);
           return pkg
         }
       ,
