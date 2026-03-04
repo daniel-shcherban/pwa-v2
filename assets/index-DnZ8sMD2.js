@@ -16546,10 +16546,28 @@ async function fetchTestItems() {
   return res.json();
 }
 function RemoteTodos() {
+  const [onlineStatus, setOnlineStatus] = host__loadShare__react__loadShare__.useState(true);
+  host__loadShare__react__loadShare__.useEffect(() => {
+    window.addEventListener("offline", () => {
+      setOnlineStatus(false);
+    });
+    window.addEventListener("online", () => {
+      setOnlineStatus(true);
+    });
+    return () => {
+      window.removeEventListener("offline", () => {
+        setOnlineStatus(false);
+      });
+      window.removeEventListener("online", () => {
+        setOnlineStatus(true);
+      });
+    };
+  }, []);
+  console.log("enabled", onlineStatus);
   const { data, isLoading, isError } = host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.useQuery({
     queryKey: ["testItems"],
-    queryFn: fetchTestItems
-    // enabled: onlineStatus,
+    queryFn: fetchTestItems,
+    enabled: onlineStatus
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     isLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading test items..." }),
@@ -16673,12 +16691,6 @@ const persister = createAsyncStoragePersister({
   // },
   storage: window.localStorage
   // key: "rq-cache",
-});
-window.addEventListener("offline", () => {
-  queryClient.setDefaultOptions({ queries: { enabled: false } });
-});
-window.addEventListener("online", () => {
-  queryClient.setDefaultOptions({ queries: { enabled: true } });
 });
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
