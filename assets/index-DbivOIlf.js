@@ -16546,27 +16546,10 @@ async function fetchTestItems() {
   return res.json();
 }
 function RemoteTodos() {
-  const [onlineStatus, setOnlineStatus] = host__loadShare__react__loadShare__.useState(true);
-  host__loadShare__react__loadShare__.useEffect(() => {
-    window.addEventListener("offline", () => {
-      setOnlineStatus(false);
-    });
-    window.addEventListener("online", () => {
-      setOnlineStatus(true);
-    });
-    return () => {
-      window.removeEventListener("offline", () => {
-        setOnlineStatus(false);
-      });
-      window.removeEventListener("online", () => {
-        setOnlineStatus(true);
-      });
-    };
-  }, []);
   const { data, isLoading, isError } = host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.useQuery({
     queryKey: ["testItems"],
-    queryFn: fetchTestItems,
-    enabled: onlineStatus
+    queryFn: fetchTestItems
+    // enabled: onlineStatus,
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     isLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading test items..." }),
@@ -16678,7 +16661,8 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
   defaultOptions: {
     queries: {
       staleTime: 1e4,
-      gcTime: 1e3 * 60 * 60 * 24
+      gcTime: 1e3 * 60 * 60 * 24,
+      networkMode: "online"
     }
   }
 });
