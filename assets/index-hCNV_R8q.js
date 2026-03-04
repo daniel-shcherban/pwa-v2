@@ -16441,8 +16441,8 @@ var clientExports = client.exports;
       strictVersion: false,
       requiredVersion: "^5.90.24"
     }}}));
-    const exportModule = await res$1.then(factory => factory());
-    var host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persister__loadShare__ = exportModule;
+    const exportModule$1 = await res$1.then(factory => factory());
+    var host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persister__loadShare__ = exportModule$1;
 
 const Todos = host__loadShare__react__loadShare__.lazy(() => __vitePreload(() => import('./host__loadRemote__remotePwa_mf_1_Todos__loadRemote__-DKwArTfN.js').then(n => n.h),true              ?[]:void 0));
 async function fetchTestItems() {
@@ -16475,7 +16475,8 @@ function RemoteTodos() {
       strictVersion: false,
       requiredVersion: "^5.90.24"
     }}}));
-    await res.then(factory => factory());
+    const exportModule = await res.then(factory => factory());
+    var host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query_mf_2_persist_mf_2_client__loadShare__ = exportModule;
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
@@ -16494,7 +16495,7 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
     }
   }
 });
-host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persister__loadShare__.createAsyncStoragePersister({
+const persister = host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persister__loadShare__.createAsyncStoragePersister({
   // storage: {
   //   getItem: (key) => Promise.resolve(localStorage.getItem(key)),
   //   setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
@@ -16504,5 +16505,12 @@ host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persiste
   // key: "rq-cache",
 });
 clientExports.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {}) }) })
+  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query_mf_2_persist_mf_2_client__loadShare__.PersistQueryClientProvider,
+    {
+      client: queryClient,
+      persistOptions: { persister },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {})
+    }
+  ) })
 );
