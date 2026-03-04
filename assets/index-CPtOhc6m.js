@@ -16678,7 +16678,7 @@ clientExports.createRoot(document.getElementById("root")).render(
     PersistQueryClientProvider,
     {
       client: queryClient,
-      persistOptions: { persister },
+      persistOptions: { persister, maxAge: 1e3 * 60 * 60 * 24 },
       children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {})
     }
   ) })
