@@ -16660,7 +16660,8 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
   defaultOptions: {
     queries: {
       staleTime: 1e4,
-      gcTime: 1e3 * 60 * 60 * 24
+      gcTime: 1e3 * 60 * 60 * 24,
+      networkMode: "offlineFirst"
     }
   }
 });
