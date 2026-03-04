@@ -16659,25 +16659,26 @@ if ("serviceWorker" in navigator) {
 const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 0,
+      staleTime: 1e4,
       gcTime: 1e3 * 60 * 60 * 24
     }
   }
 });
 const persister = createAsyncStoragePersister({
-  storage: {
-    getItem: (key) => Promise.resolve(localStorage.getItem(key)),
-    setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
-    removeItem: (key) => Promise.resolve(localStorage.removeItem(key))
-  },
-  key: "rq-cache"
+  // storage: {
+  //   getItem: (key) => Promise.resolve(localStorage.getItem(key)),
+  //   setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
+  //   removeItem: (key) => Promise.resolve(localStorage.removeItem(key)),
+  // },
+  storage: window.localStorage
+  // key: "rq-cache",
 });
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     PersistQueryClientProvider,
     {
       client: queryClient,
-      persistOptions: { persister, maxAge: 1e3 * 60 * 60 * 24 },
+      persistOptions: { persister },
       children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {})
     }
   ) })
