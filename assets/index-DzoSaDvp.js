@@ -16453,9 +16453,30 @@ async function fetchTestItems() {
   return res.json();
 }
 function RemoteTodos() {
+  const [onlineStatus, setOnlineStatus] = host__loadShare__react__loadShare__.useState(navigator.onLine);
+  console.log("onlineStatus", onlineStatus);
+  host__loadShare__react__loadShare__.useEffect(() => {
+    window.addEventListener("offline", () => {
+      console.log("offline");
+      setOnlineStatus(false);
+    });
+    window.addEventListener("online", () => {
+      console.log("online");
+      setOnlineStatus(true);
+    });
+    return () => {
+      window.removeEventListener("offline", () => {
+        setOnlineStatus(false);
+      });
+      window.removeEventListener("online", () => {
+        setOnlineStatus(true);
+      });
+    };
+  }, []);
   const { data, isLoading, isError } = host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.useQuery({
     queryKey: ["testItems"],
-    queryFn: fetchTestItems
+    queryFn: fetchTestItems,
+    enabled: onlineStatus
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading Todos..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Todos, {}) }),
@@ -16496,13 +16517,7 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
   }
 });
 const persister = host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persister__loadShare__.createAsyncStoragePersister({
-  // storage: {
-  //   getItem: (key) => Promise.resolve(localStorage.getItem(key)),
-  //   setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
-  //   removeItem: (key) => Promise.resolve(localStorage.removeItem(key)),
-  // },
   storage: window.localStorage
-  // key: "rq-cache",
 });
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
