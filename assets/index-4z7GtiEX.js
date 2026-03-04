@@ -16659,7 +16659,7 @@ if ("serviceWorker" in navigator) {
 const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1e3 * 60 * 60 * 24,
+      staleTime: 0,
       gcTime: 1e3 * 60 * 60 * 24
     }
   }
