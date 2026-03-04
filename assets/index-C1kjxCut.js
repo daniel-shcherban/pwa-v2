@@ -1,5 +1,5 @@
 import { h as host__mf_v__runtimeInit__mf_v__, a as index_cjs } from './host__mf_v__runtimeInit__mf_v__-CjaOuR8C.js';
-import { t as timeoutManager, j as jsxRuntimeExports, h as hydrate, d as dehydrate } from './hydration-WfGuJdvK.js';
+import { t as timeoutManager, j as jsxRuntimeExports } from './timeoutManager-Cfa_bNa8.js';
 import { h as host__loadShare__react__loadShare__ } from './host__loadShare__react__loadShare__-Cshx09tR.js';
 import { h as host__loadShare__react_mf_2_dom__loadShare__ } from './host__loadShare__react_mf_2_dom__loadShare__-D_5sPsPU.js';
 import { _ as __vitePreload } from './preload-helper-C7Zd8gLW.js';
@@ -16546,30 +16546,9 @@ async function fetchTestItems() {
   return res.json();
 }
 function RemoteTodos() {
-  const [onlineStatus, setOnlineStatus] = host__loadShare__react__loadShare__.useState(navigator.onLine);
-  console.log("onlineStatus", onlineStatus);
-  host__loadShare__react__loadShare__.useEffect(() => {
-    window.addEventListener("offline", () => {
-      console.log("offline");
-      setOnlineStatus(false);
-    });
-    window.addEventListener("online", () => {
-      console.log("online");
-      setOnlineStatus(true);
-    });
-    return () => {
-      window.removeEventListener("offline", () => {
-        setOnlineStatus(false);
-      });
-      window.removeEventListener("online", () => {
-        setOnlineStatus(true);
-      });
-    };
-  }, []);
   const { data, isLoading, isError } = host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.useQuery({
     queryKey: ["testItems"],
-    queryFn: fetchTestItems,
-    enabled: onlineStatus
+    queryFn: fetchTestItems
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     isLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading test items..." }),
@@ -16577,96 +16556,6 @@ function RemoteTodos() {
     data && /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { children: data.map((item, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: item.city }, item.id ?? index)) })
   ] });
 }
-
-var cacheEventTypes = ["added", "removed", "updated"];
-function isCacheEventType(eventType) {
-  return cacheEventTypes.includes(eventType);
-}
-async function persistQueryClientRestore({
-  queryClient,
-  persister,
-  maxAge = 1e3 * 60 * 60 * 24,
-  buster = "",
-  hydrateOptions
-}) {
-  try {
-    const persistedClient = await persister.restoreClient();
-    if (persistedClient) {
-      if (persistedClient.timestamp) {
-        const expired = Date.now() - persistedClient.timestamp > maxAge;
-        const busted = persistedClient.buster !== buster;
-        if (expired || busted) {
-          return persister.removeClient();
-        } else {
-          hydrate(queryClient, persistedClient.clientState, hydrateOptions);
-        }
-      } else {
-        return persister.removeClient();
-      }
-    }
-  } catch (err) {
-    await persister.removeClient();
-    throw err;
-  }
-}
-async function persistQueryClientSave({
-  queryClient,
-  persister,
-  buster = "",
-  dehydrateOptions
-}) {
-  const persistClient = {
-    buster,
-    timestamp: Date.now(),
-    clientState: dehydrate(queryClient, dehydrateOptions)
-  };
-  await persister.persistClient(persistClient);
-}
-function persistQueryClientSubscribe(props) {
-  const unsubscribeQueryCache = props.queryClient.getQueryCache().subscribe((event) => {
-    if (isCacheEventType(event.type)) {
-      persistQueryClientSave(props);
-    }
-  });
-  const unsubscribeMutationCache = props.queryClient.getMutationCache().subscribe((event) => {
-    if (isCacheEventType(event.type)) {
-      persistQueryClientSave(props);
-    }
-  });
-  return () => {
-    unsubscribeQueryCache();
-    unsubscribeMutationCache();
-  };
-}
-
-var PersistQueryClientProvider = ({
-  children,
-  persistOptions,
-  onSuccess,
-  onError,
-  ...props
-}) => {
-  const [isRestoring, setIsRestoring] = host__loadShare__react__loadShare__.useState(true);
-  const refs = host__loadShare__react__loadShare__.useRef({ persistOptions, onSuccess, onError });
-  const didRestore = host__loadShare__react__loadShare__.useRef(false);
-  host__loadShare__react__loadShare__.useEffect(() => {
-    refs.current = { persistOptions, onSuccess, onError };
-  });
-  host__loadShare__react__loadShare__.useEffect(() => {
-    const options = {
-      ...refs.current.persistOptions,
-      queryClient: props.client
-    };
-    if (!didRestore.current) {
-      didRestore.current = true;
-      persistQueryClientRestore(options).then(() => refs.current.onSuccess?.()).catch(() => refs.current.onError?.()).finally(() => {
-        setIsRestoring(false);
-      });
-    }
-    return isRestoring ? void 0 : persistQueryClientSubscribe(options);
-  }, [props.client, isRestoring]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClientProvider, { ...props, children: /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.IsRestoringProvider, { value: isRestoring, children }) });
-};
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
@@ -16685,7 +16574,7 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
     }
   }
 });
-const persister = createAsyncStoragePersister({
+createAsyncStoragePersister({
   // storage: {
   //   getItem: (key) => Promise.resolve(localStorage.getItem(key)),
   //   setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
@@ -16695,12 +16584,5 @@ const persister = createAsyncStoragePersister({
   // key: "rq-cache",
 });
 clientExports.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    PersistQueryClientProvider,
-    {
-      client: queryClient,
-      persistOptions: { persister },
-      children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {})
-    }
-  ) })
+  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {}) }) })
 );
