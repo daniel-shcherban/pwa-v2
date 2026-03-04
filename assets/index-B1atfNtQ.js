@@ -16546,10 +16546,30 @@ async function fetchTestItems() {
   return res.json();
 }
 function RemoteTodos() {
+  const [onlineStatus, setOnlineStatus] = host__loadShare__react__loadShare__.useState(true);
+  console.log("onlineStatus", onlineStatus);
+  host__loadShare__react__loadShare__.useEffect(() => {
+    window.addEventListener("offline", () => {
+      console.log("offline");
+      setOnlineStatus(false);
+    });
+    window.addEventListener("online", () => {
+      console.log("online");
+      setOnlineStatus(true);
+    });
+    return () => {
+      window.removeEventListener("offline", () => {
+        setOnlineStatus(false);
+      });
+      window.removeEventListener("online", () => {
+        setOnlineStatus(true);
+      });
+    };
+  }, []);
   const { data, isLoading, isError } = host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.useQuery({
     queryKey: ["testItems"],
-    queryFn: fetchTestItems
-    // enabled: onlineStatus,
+    queryFn: fetchTestItems,
+    enabled: onlineStatus
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     isLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading test items..." }),
