@@ -16546,7 +16546,7 @@ async function fetchTestItems() {
   return res.json();
 }
 function RemoteTodos() {
-  const [onlineStatus, setOnlineStatus] = host__loadShare__react__loadShare__.useState(true);
+  const [onlineStatus, setOnlineStatus] = host__loadShare__react__loadShare__.useState(navigator.onLine);
   console.log("onlineStatus", onlineStatus);
   host__loadShare__react__loadShare__.useEffect(() => {
     window.addEventListener("offline", () => {
