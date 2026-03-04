@@ -16537,7 +16537,7 @@ var createAsyncStoragePersister = ({
   };
 };
 
-host__loadShare__react__loadShare__.lazy(() => __vitePreload(() => import('./host__loadRemote__remotePwa_mf_1_Todos__loadRemote__-DKwArTfN.js').then(n => n.h),true              ?[]:void 0));
+const Todos = host__loadShare__react__loadShare__.lazy(() => __vitePreload(() => import('./host__loadRemote__remotePwa_mf_1_Todos__loadRemote__-DKwArTfN.js').then(n => n.h),true              ?[]:void 0));
 async function fetchTestItems() {
   const res = await fetch(
     "https://69a15b962e82ee536fa0f03a.mockapi.io/api/v1/test"
@@ -16551,6 +16551,7 @@ function RemoteTodos() {
     queryFn: fetchTestItems
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading Todos..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Todos, {}) }),
     isLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading test items..." }),
     isError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Error loading test items." }),
     data && /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { children: data.map((item, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: item.city }, item.id ?? index)) })
