@@ -1,6 +1,6 @@
 import { _ as __vitePreload } from './preload-helper-C7Zd8gLW.js';
 
-const remoteEntryPromise = __vitePreload(() => import('./remoteEntry-pLTUk6ej.js'),true              ?[]:void 0);
+const remoteEntryPromise = __vitePreload(() => import('./remoteEntry-Di9Y3I7a.js'),true              ?[]:void 0);
     // __tla only serves as a hack for vite-plugin-top-level-await. 
     Promise.resolve(remoteEntryPromise)
       .then(remoteEntry => {
