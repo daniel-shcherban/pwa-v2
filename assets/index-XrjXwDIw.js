@@ -16480,7 +16480,7 @@ function RemoteTodos() {
   });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading Todos..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Todos, {}) }),
-    isLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading test items..." }),
+    isLoading && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading test items...." }),
     isError && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Error loading test items." }),
     data && /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { children: data.map((item, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: item.city }, item.id ?? index)) })
   ] });
