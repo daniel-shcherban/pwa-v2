@@ -1,8 +1,6 @@
 import { h as host__loadShare__react__loadShare__ } from './host__loadShare__react__loadShare__-Cshx09tR.js';
-import { i as isServer, p as pendingThenable, s as sleep, a as isValidTimeout, r as replaceData, n as noop, b as resolveEnabled, c as skipToken, d as resolveStaleTime, t as timeUntilStale, e as notifyManager, f as ensureQueryFn, g as shallowEqualObjects, h as addToStart, j as addToEnd, k as addConsumeAwareSignal, m as matchMutation, l as hashKey, o as replaceEqualDeep, q as hashQueryKeyByOptions, u as matchQuery, v as functionalUpdate, w as partialMatchKey, x as shouldThrowError, y as hydrate } from './notifyManager-DgMMGEIW.js';
-export { z as defaultScheduler, A as defaultShouldDehydrateMutation, B as defaultShouldDehydrateQuery, C as dehydrate, D as keepPreviousData } from './notifyManager-DgMMGEIW.js';
-import { t as timeoutManager } from './timeoutManager-CEr9Wjj5.js';
-import { j as jsxRuntimeExports } from './jsx-runtime-DtXR568w.js';
+import { i as isServer, s as systemSetTimeoutZero, p as pendingThenable, a as sleep, b as isValidTimeout, t as timeoutManager, r as replaceData, n as noop, c as resolveEnabled, e as skipToken, f as resolveStaleTime, g as timeUntilStale, k as ensureQueryFn, l as shallowEqualObjects, m as addToStart, o as addToEnd, q as addConsumeAwareSignal, u as matchMutation, v as hashKey, w as replaceEqualDeep, x as hashQueryKeyByOptions, y as matchQuery, z as functionalUpdate, A as partialMatchKey, j as jsxRuntimeExports, B as shouldThrowError, h as hydrate } from './hydration-WfGuJdvK.js';
+export { C as defaultShouldDehydrateMutation, D as defaultShouldDehydrateQuery, d as dehydrate, E as keepPreviousData } from './hydration-WfGuJdvK.js';
 import './_commonjsHelpers-BAGoDD49.js';
 import './host__mf_v__runtimeInit__mf_v__-CjaOuR8C.js';
 
@@ -90,6 +88,86 @@ var FocusManager = class extends Subscribable {
   }
 };
 var focusManager = new FocusManager();
+
+// src/notifyManager.ts
+var defaultScheduler = systemSetTimeoutZero;
+function createNotifyManager() {
+  let queue = [];
+  let transactions = 0;
+  let notifyFn = (callback) => {
+    callback();
+  };
+  let batchNotifyFn = (callback) => {
+    callback();
+  };
+  let scheduleFn = defaultScheduler;
+  const schedule = (callback) => {
+    if (transactions) {
+      queue.push(callback);
+    } else {
+      scheduleFn(() => {
+        notifyFn(callback);
+      });
+    }
+  };
+  const flush = () => {
+    const originalQueue = queue;
+    queue = [];
+    if (originalQueue.length) {
+      scheduleFn(() => {
+        batchNotifyFn(() => {
+          originalQueue.forEach((callback) => {
+            notifyFn(callback);
+          });
+        });
+      });
+    }
+  };
+  return {
+    batch: (callback) => {
+      let result;
+      transactions++;
+      try {
+        result = callback();
+      } finally {
+        transactions--;
+        if (!transactions) {
+          flush();
+        }
+      }
+      return result;
+    },
+    /**
+     * All calls to the wrapped function will be batched.
+     */
+    batchCalls: (callback) => {
+      return (...args) => {
+        schedule(() => {
+          callback(...args);
+        });
+      };
+    },
+    schedule,
+    /**
+     * Use this method to set a custom notify function.
+     * This can be used to for example wrap notifications with `React.act` while running tests.
+     */
+    setNotifyFunction: (fn) => {
+      notifyFn = fn;
+    },
+    /**
+     * Use this method to set a custom function to batch notifications together into a single tick.
+     * By default React Query will use the batch function provided by ReactDOM or React Native.
+     */
+    setBatchNotifyFunction: (fn) => {
+      batchNotifyFn = fn;
+    },
+    setScheduler: (fn) => {
+      scheduleFn = fn;
+    }
+  };
+}
+var notifyManager = createNotifyManager();
 
 // src/onlineManager.ts
 var OnlineManager = class extends Subscribable {
@@ -2945,4 +3023,4 @@ function useInfiniteQuery(options, queryClient) {
   );
 }
 
-export { CancelledError, HydrationBoundary, InfiniteQueryObserver, IsRestoringProvider, Mutation, MutationCache, MutationObserver, QueriesObserver, Query, QueryCache, QueryClient, QueryClientContext, QueryClientProvider, QueryErrorResetBoundary, QueryObserver, dataTagErrorSymbol, dataTagSymbol, streamedQuery as experimental_streamedQuery, focusManager, hashKey, hydrate, infiniteQueryOptions, isCancelledError, isServer, matchMutation, matchQuery, mutationOptions, noop, notifyManager, onlineManager, partialMatchKey, queryOptions, replaceEqualDeep, shouldThrowError, skipToken, timeoutManager, unsetMarker, useInfiniteQuery, useIsFetching, useIsMutating, useIsRestoring, useMutation, useMutationState, usePrefetchInfiniteQuery, usePrefetchQuery, useQueries, useQuery, useQueryClient, useQueryErrorResetBoundary, useSuspenseInfiniteQuery, useSuspenseQueries, useSuspenseQuery };
+export { CancelledError, HydrationBoundary, InfiniteQueryObserver, IsRestoringProvider, Mutation, MutationCache, MutationObserver, QueriesObserver, Query, QueryCache, QueryClient, QueryClientContext, QueryClientProvider, QueryErrorResetBoundary, QueryObserver, dataTagErrorSymbol, dataTagSymbol, defaultScheduler, streamedQuery as experimental_streamedQuery, focusManager, hashKey, hydrate, infiniteQueryOptions, isCancelledError, isServer, matchMutation, matchQuery, mutationOptions, noop, notifyManager, onlineManager, partialMatchKey, queryOptions, replaceEqualDeep, shouldThrowError, skipToken, timeoutManager, unsetMarker, useInfiniteQuery, useIsFetching, useIsMutating, useIsRestoring, useMutation, useMutationState, usePrefetchInfiniteQuery, usePrefetchQuery, useQueries, useQuery, useQueryClient, useQueryErrorResetBoundary, useSuspenseInfiniteQuery, useSuspenseQueries, useSuspenseQuery };

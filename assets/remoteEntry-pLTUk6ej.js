@@ -10,17 +10,7 @@ const importMap = {
         }
       ,
         "@tanstack/react-query": async () => {
-          let pkg = await __vitePreload(() => import('./index-CENrO6sn.js'),true              ?[]:void 0);
-          return pkg
-        }
-      ,
-        "@tanstack/query-async-storage-persister": async () => {
-          let pkg = await __vitePreload(() => import('./index-CgjQ5ChB.js'),true              ?[]:void 0);
-          return pkg
-        }
-      ,
-        "@tanstack/react-query-persist-client": async () => {
-          let pkg = await __vitePreload(() => import('./index-CCm9aGRi.js'),true              ?[]:void 0);
+          let pkg = await __vitePreload(() => import('./index-B0GBI3lt.js'),true              ?[]:void 0);
           return pkg
         }
       ,
@@ -31,11 +21,6 @@ const importMap = {
       ,
         "react-dom": async () => {
           let pkg = await __vitePreload(() => import('./index-r4krjglJ.js').then(n => n.i),true              ?[]:void 0);
-          return pkg
-        }
-      ,
-        "@tanstack/query-persist-client-core": async () => {
-          let pkg = await __vitePreload(() => import('./index-B9UktRyM.js'),true              ?[]:void 0);
           return pkg
         }
       ,
@@ -104,58 +89,6 @@ const importMap = {
             }
           }
         ,
-          "@tanstack/query-async-storage-persister": {
-            name: "@tanstack/query-async-storage-persister",
-            version: "5.90.24",
-            scope: ["default"],
-            loaded: false,
-            from: "host",
-            async get () {
-              usedShared["@tanstack/query-async-storage-persister"].loaded = true;
-              const {"@tanstack/query-async-storage-persister": pkgDynamicImport} = importMap; 
-              const res = await pkgDynamicImport();
-              const exportModule = {...res};
-              // All npm packages pre-built by vite will be converted to esm
-              Object.defineProperty(exportModule, "__esModule", {
-                value: true,
-                enumerable: false
-              });
-              return function () {
-                return exportModule
-              }
-            },
-            shareConfig: {
-              singleton: true,
-              requiredVersion: "^5.90.24"
-            }
-          }
-        ,
-          "@tanstack/react-query-persist-client": {
-            name: "@tanstack/react-query-persist-client",
-            version: "5.90.24",
-            scope: ["default"],
-            loaded: false,
-            from: "host",
-            async get () {
-              usedShared["@tanstack/react-query-persist-client"].loaded = true;
-              const {"@tanstack/react-query-persist-client": pkgDynamicImport} = importMap; 
-              const res = await pkgDynamicImport();
-              const exportModule = {...res};
-              // All npm packages pre-built by vite will be converted to esm
-              Object.defineProperty(exportModule, "__esModule", {
-                value: true,
-                enumerable: false
-              });
-              return function () {
-                return exportModule
-              }
-            },
-            shareConfig: {
-              singleton: true,
-              requiredVersion: "^5.90.24"
-            }
-          }
-        ,
           "@ev/eva-container-api": {
             name: "@ev/eva-container-api",
             version: "5.5.0",
@@ -205,32 +138,6 @@ const importMap = {
             shareConfig: {
               singleton: true,
               requiredVersion: "^19.2.0"
-            }
-          }
-        ,
-          "@tanstack/query-persist-client-core": {
-            name: "@tanstack/query-persist-client-core",
-            version: "5.92.1",
-            scope: ["default"],
-            loaded: false,
-            from: "host",
-            async get () {
-              usedShared["@tanstack/query-persist-client-core"].loaded = true;
-              const {"@tanstack/query-persist-client-core": pkgDynamicImport} = importMap; 
-              const res = await pkgDynamicImport();
-              const exportModule = {...res};
-              // All npm packages pre-built by vite will be converted to esm
-              Object.defineProperty(exportModule, "__esModule", {
-                value: true,
-                enumerable: false
-              });
-              return function () {
-                return exportModule
-              }
-            },
-            shareConfig: {
-              singleton: true,
-              requiredVersion: "^5.92.1"
             }
           }
         ,

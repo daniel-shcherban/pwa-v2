@@ -1,8 +1,7 @@
 import { h as host__mf_v__runtimeInit__mf_v__, a as index_cjs } from './host__mf_v__runtimeInit__mf_v__-CjaOuR8C.js';
-import { j as jsxRuntimeExports } from './jsx-runtime-DtXR568w.js';
+import { t as timeoutManager, j as jsxRuntimeExports, h as hydrate, d as dehydrate } from './hydration-WfGuJdvK.js';
 import { h as host__loadShare__react__loadShare__ } from './host__loadShare__react__loadShare__-Cshx09tR.js';
 import { h as host__loadShare__react_mf_2_dom__loadShare__ } from './host__loadShare__react_mf_2_dom__loadShare__-D_5sPsPU.js';
-import { h as host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__ } from './host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__-BzI4kPcQ.js';
 import { _ as __vitePreload } from './preload-helper-C7Zd8gLW.js';
 import './_commonjsHelpers-BAGoDD49.js';
 
@@ -5614,7 +5613,7 @@ function startTransition(fiber, queue, pendingState, finishedState, callback) {
       (ReactSharedInternals.T = prevTransition);
   }
 }
-function noop() {}
+function noop$2() {}
 function startHostTransition(formFiber, pendingState, action, formData) {
   if (5 !== formFiber.tag) throw Error(formatProdErrorMessage(476));
   var queue = ensureFormComponentIsStateful(formFiber).queue;
@@ -5624,7 +5623,7 @@ function startHostTransition(formFiber, pendingState, action, formData) {
     pendingState,
     sharedNotPendingObject,
     null === action
-      ? noop
+      ? noop$2
       : function () {
           requestFormReset$1(formFiber);
           return action(formData);
@@ -16421,28 +16420,122 @@ var clientExports = client.exports;
 
 // dev uses dynamic import to separate chunks
     
-    const {loadShare: loadShare$2} = index_cjs;
-    const {initPromise: initPromise$2} = host__mf_v__runtimeInit__mf_v__;
-    const res$2 = initPromise$2.then(_ => loadShare$2("@ev/eva-container-api", {
+    const {loadShare: loadShare$1} = index_cjs;
+    const {initPromise: initPromise$1} = host__mf_v__runtimeInit__mf_v__;
+    const res$1 = initPromise$1.then(_ => loadShare$1("@ev/eva-container-api", {
     customShareInfo: {shareConfig:{
       singleton: true,
       strictVersion: false,
       requiredVersion: "^5.5.0"
     }}}));
-    await res$2.then(factory => factory());
+    await res$1.then(factory => factory());
 
 // dev uses dynamic import to separate chunks
     
-    const {loadShare: loadShare$1} = index_cjs;
-    const {initPromise: initPromise$1} = host__mf_v__runtimeInit__mf_v__;
-    const res$1 = initPromise$1.then(_ => loadShare$1("@tanstack/query-async-storage-persister", {
+    const {loadShare} = index_cjs;
+    const {initPromise} = host__mf_v__runtimeInit__mf_v__;
+    const res = initPromise.then(_ => loadShare("@tanstack/react-query", {
     customShareInfo: {shareConfig:{
       singleton: true,
       strictVersion: false,
-      requiredVersion: "^5.90.24"
+      requiredVersion: "^5.90.21"
     }}}));
-    const exportModule = await res$1.then(factory => factory());
-    var host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persister__loadShare__ = exportModule;
+    const exportModule = await res.then(factory => factory());
+    var host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__ = exportModule;
+
+// src/utils.ts
+function noop() {
+}
+
+// src/asyncThrottle.ts
+function asyncThrottle(func, { interval = 1e3, onError = noop } = {}) {
+  if (typeof func !== "function") throw new Error("argument is not function.");
+  let nextExecutionTime = 0;
+  let lastArgs = null;
+  let isExecuting = false;
+  let isScheduled = false;
+  return async (...args) => {
+    lastArgs = args;
+    if (isScheduled) return;
+    isScheduled = true;
+    while (isExecuting) {
+      await new Promise((done) => timeoutManager.setTimeout(done, interval));
+    }
+    while (Date.now() < nextExecutionTime) {
+      await new Promise(
+        (done) => timeoutManager.setTimeout(done, nextExecutionTime - Date.now())
+      );
+    }
+    isScheduled = false;
+    isExecuting = true;
+    try {
+      await func(...lastArgs);
+    } catch (error) {
+      try {
+        onError(error);
+      } catch {
+      }
+    }
+    nextExecutionTime = Date.now() + interval;
+    isExecuting = false;
+  };
+}
+
+// src/index.ts
+var createAsyncStoragePersister = ({
+  storage,
+  key = `REACT_QUERY_OFFLINE_CACHE`,
+  throttleTime = 1e3,
+  serialize = JSON.stringify,
+  deserialize = JSON.parse,
+  retry
+}) => {
+  if (storage) {
+    const trySave = async (persistedClient) => {
+      try {
+        const serialized = await serialize(persistedClient);
+        await storage.setItem(key, serialized);
+        return;
+      } catch (error) {
+        return error;
+      }
+    };
+    return {
+      persistClient: asyncThrottle(
+        async (persistedClient) => {
+          let client = persistedClient;
+          let error = await trySave(client);
+          let errorCount = 0;
+          while (error && client) {
+            errorCount++;
+            client = await retry?.({
+              persistedClient: client,
+              error,
+              errorCount
+            });
+            if (client) {
+              error = await trySave(client);
+            }
+          }
+        },
+        { interval: throttleTime }
+      ),
+      restoreClient: async () => {
+        const cacheString = await storage.getItem(key);
+        if (!cacheString) {
+          return;
+        }
+        return await deserialize(cacheString);
+      },
+      removeClient: () => storage.removeItem(key)
+    };
+  }
+  return {
+    persistClient: noop,
+    restoreClient: () => Promise.resolve(void 0),
+    removeClient: noop
+  };
+};
 
 const Todos = host__loadShare__react__loadShare__.lazy(() => __vitePreload(() => import('./host__loadRemote__remotePwa_mf_1_Todos__loadRemote__-DKwArTfN.js').then(n => n.h),true              ?[]:void 0));
 async function fetchTestItems() {
@@ -16486,17 +16579,95 @@ function RemoteTodos() {
   ] });
 }
 
-// dev uses dynamic import to separate chunks
-    
-    const {loadShare} = index_cjs;
-    const {initPromise} = host__mf_v__runtimeInit__mf_v__;
-    const res = initPromise.then(_ => loadShare("@tanstack/react-query-persist-client", {
-    customShareInfo: {shareConfig:{
-      singleton: true,
-      strictVersion: false,
-      requiredVersion: "^5.90.24"
-    }}}));
-    await res.then(factory => factory());
+var cacheEventTypes = ["added", "removed", "updated"];
+function isCacheEventType(eventType) {
+  return cacheEventTypes.includes(eventType);
+}
+async function persistQueryClientRestore({
+  queryClient,
+  persister,
+  maxAge = 1e3 * 60 * 60 * 24,
+  buster = "",
+  hydrateOptions
+}) {
+  try {
+    const persistedClient = await persister.restoreClient();
+    if (persistedClient) {
+      if (persistedClient.timestamp) {
+        const expired = Date.now() - persistedClient.timestamp > maxAge;
+        const busted = persistedClient.buster !== buster;
+        if (expired || busted) {
+          return persister.removeClient();
+        } else {
+          hydrate(queryClient, persistedClient.clientState, hydrateOptions);
+        }
+      } else {
+        return persister.removeClient();
+      }
+    }
+  } catch (err) {
+    await persister.removeClient();
+    throw err;
+  }
+}
+async function persistQueryClientSave({
+  queryClient,
+  persister,
+  buster = "",
+  dehydrateOptions
+}) {
+  const persistClient = {
+    buster,
+    timestamp: Date.now(),
+    clientState: dehydrate(queryClient, dehydrateOptions)
+  };
+  await persister.persistClient(persistClient);
+}
+function persistQueryClientSubscribe(props) {
+  const unsubscribeQueryCache = props.queryClient.getQueryCache().subscribe((event) => {
+    if (isCacheEventType(event.type)) {
+      persistQueryClientSave(props);
+    }
+  });
+  const unsubscribeMutationCache = props.queryClient.getMutationCache().subscribe((event) => {
+    if (isCacheEventType(event.type)) {
+      persistQueryClientSave(props);
+    }
+  });
+  return () => {
+    unsubscribeQueryCache();
+    unsubscribeMutationCache();
+  };
+}
+
+var PersistQueryClientProvider = ({
+  children,
+  persistOptions,
+  onSuccess,
+  onError,
+  ...props
+}) => {
+  const [isRestoring, setIsRestoring] = host__loadShare__react__loadShare__.useState(true);
+  const refs = host__loadShare__react__loadShare__.useRef({ persistOptions, onSuccess, onError });
+  const didRestore = host__loadShare__react__loadShare__.useRef(false);
+  host__loadShare__react__loadShare__.useEffect(() => {
+    refs.current = { persistOptions, onSuccess, onError };
+  });
+  host__loadShare__react__loadShare__.useEffect(() => {
+    const options = {
+      ...refs.current.persistOptions,
+      queryClient: props.client
+    };
+    if (!didRestore.current) {
+      didRestore.current = true;
+      persistQueryClientRestore(options).then(() => refs.current.onSuccess?.()).catch(() => refs.current.onError?.()).finally(() => {
+        setIsRestoring(false);
+      });
+    }
+    return isRestoring ? void 0 : persistQueryClientSubscribe(options);
+  }, [props.client, isRestoring]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClientProvider, { ...props, children: /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.IsRestoringProvider, { value: isRestoring, children }) });
+};
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
@@ -16515,9 +16686,16 @@ const queryClient = new host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__l
     }
   }
 });
-host__loadShare___mf_0_tanstack_mf_1_query_mf_2_async_mf_2_storage_mf_2_persister__loadShare__.createAsyncStoragePersister({
+const persister = createAsyncStoragePersister({
   storage: window.localStorage
 });
 clientExports.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare___mf_0_tanstack_mf_1_react_mf_2_query__loadShare__.QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {}) }) })
+  /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+    PersistQueryClientProvider,
+    {
+      client: queryClient,
+      persistOptions: { persister },
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteTodos, {})
+    }
+  ) })
 );
