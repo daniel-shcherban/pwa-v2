@@ -19377,16 +19377,17 @@ function del(key, customStore = defaultGetStore()) {
     });
 }
 
-function createIDBPersister(idbValidKey = "reactQuery") {
+function createIDBPersister(dbName) {
+  const store = createStore(dbName, "cache");
   return {
     persistClient: async (client) => {
-      await set(idbValidKey, client);
+      await set("client", client, store);
     },
     restoreClient: async () => {
-      return await get(idbValidKey);
+      return await get("client", store);
     },
     removeClient: async () => {
-      await del(idbValidKey);
+      await del("client", store);
     }
   };
 }
@@ -19408,7 +19409,7 @@ const queryClient = new QueryClient({
     }
   }
 });
-const persister = createIDBPersister();
+const persister = createIDBPersister("host");
 console.log("persister", persister);
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
