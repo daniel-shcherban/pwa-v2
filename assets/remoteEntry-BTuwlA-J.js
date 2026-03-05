@@ -9,13 +9,13 @@ const importMap = {
           return pkg
         }
       ,
-        "@ev/eva-container-api": async () => {
-          let pkg = await __vitePreload(() => import('./index-B2sskZhK.js').then(n => n.a8),true              ?[]:void 0);
+        "react-dom": async () => {
+          let pkg = await __vitePreload(() => import('./index-r4krjglJ.js').then(n => n.i),true              ?[]:void 0);
           return pkg
         }
       ,
-        "react-dom": async () => {
-          let pkg = await __vitePreload(() => import('./index-r4krjglJ.js').then(n => n.i),true              ?[]:void 0);
+        "@ev/eva-container-api": async () => {
+          let pkg = await __vitePreload(() => import('./index-B2sskZhK.js').then(n => n.a8),true              ?[]:void 0);
           return pkg
         }
       ,
@@ -58,32 +58,6 @@ const importMap = {
             }
           }
         ,
-          "@ev/eva-container-api": {
-            name: "@ev/eva-container-api",
-            version: "5.5.0",
-            scope: ["default"],
-            loaded: false,
-            from: "host",
-            async get () {
-              usedShared["@ev/eva-container-api"].loaded = true;
-              const {"@ev/eva-container-api": pkgDynamicImport} = importMap; 
-              const res = await pkgDynamicImport();
-              const exportModule = {...res};
-              // All npm packages pre-built by vite will be converted to esm
-              Object.defineProperty(exportModule, "__esModule", {
-                value: true,
-                enumerable: false
-              });
-              return function () {
-                return exportModule
-              }
-            },
-            shareConfig: {
-              singleton: true,
-              requiredVersion: "^5.5.0"
-            }
-          }
-        ,
           "react-dom": {
             name: "react-dom",
             version: "19.2.0",
@@ -107,6 +81,32 @@ const importMap = {
             shareConfig: {
               singleton: true,
               requiredVersion: "^19.2.0"
+            }
+          }
+        ,
+          "@ev/eva-container-api": {
+            name: "@ev/eva-container-api",
+            version: "5.5.0",
+            scope: ["default"],
+            loaded: false,
+            from: "host",
+            async get () {
+              usedShared["@ev/eva-container-api"].loaded = true;
+              const {"@ev/eva-container-api": pkgDynamicImport} = importMap; 
+              const res = await pkgDynamicImport();
+              const exportModule = {...res};
+              // All npm packages pre-built by vite will be converted to esm
+              Object.defineProperty(exportModule, "__esModule", {
+                value: true,
+                enumerable: false
+              });
+              return function () {
+                return exportModule
+              }
+            },
+            shareConfig: {
+              singleton: true,
+              requiredVersion: "^5.5.0"
             }
           }
         ,
