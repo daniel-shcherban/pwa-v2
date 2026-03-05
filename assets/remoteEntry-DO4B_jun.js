@@ -9,11 +9,6 @@ const importMap = {
           return pkg
         }
       ,
-        "@tanstack/react-query": async () => {
-          let pkg = await __vitePreload(() => import('./index-DZ-YH6sq.js'),true              ?[]:void 0);
-          return pkg
-        }
-      ,
         "@ev/eva-container-api": async () => {
           let pkg = await __vitePreload(() => import('./index-B2sskZhK.js').then(n => n.a8),true              ?[]:void 0);
           return pkg
@@ -60,32 +55,6 @@ const importMap = {
             shareConfig: {
               singleton: true,
               requiredVersion: "^19.2.0"
-            }
-          }
-        ,
-          "@tanstack/react-query": {
-            name: "@tanstack/react-query",
-            version: "5.90.21",
-            scope: ["default"],
-            loaded: false,
-            from: "host",
-            async get () {
-              usedShared["@tanstack/react-query"].loaded = true;
-              const {"@tanstack/react-query": pkgDynamicImport} = importMap; 
-              const res = await pkgDynamicImport();
-              const exportModule = {...res};
-              // All npm packages pre-built by vite will be converted to esm
-              Object.defineProperty(exportModule, "__esModule", {
-                value: true,
-                enumerable: false
-              });
-              return function () {
-                return exportModule
-              }
-            },
-            shareConfig: {
-              singleton: true,
-              requiredVersion: "^5.90.21"
             }
           }
         ,
