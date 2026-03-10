@@ -19392,15 +19392,6 @@ function createIDBPersister(dbName) {
   };
 }
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for (const reg of registrations) {
-      if (!reg.scope.includes("/pwa-v2/")) {
-        reg.unregister();
-      }
-    }
-  });
-}
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -19410,7 +19401,6 @@ const queryClient = new QueryClient({
   }
 });
 const persister = createIDBPersister("host");
-console.log("persister", persister);
 clientExports.createRoot(document.getElementById("root")).render(
   /* @__PURE__ */ jsxRuntimeExports.jsx(host__loadShare__react__loadShare__.StrictMode, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     PersistQueryClientProvider,
